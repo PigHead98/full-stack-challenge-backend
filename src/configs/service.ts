@@ -26,6 +26,10 @@ export class ConfigService {
     );
   }
 
+  get DB_CHALLENGE_NAME(): string {
+    return _.toLower(process.env.DB_CHALLENGE_NAME) || 'challenge';
+  }
+
   get BODY_SIZE_LIMIT(): string {
     return process.env.BODY_SIZE_LIMIT || '2mb';
   }

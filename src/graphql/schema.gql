@@ -2,11 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input GqlCreateNoteDto {
+  content: String
+  title: String
+}
+
+type Mutation {
+  createNote(note: GqlCreateNoteDto!): NoteEntity!
+}
+
 type NoteEntity {
   content: String!
-  id: String!
   title: String!
-  uuid: String!
+  uuid: String
 }
 
 type Query {

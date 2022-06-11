@@ -8,6 +8,9 @@ export class Note {
   @Prop()
   name: 'Note';
 
+  @Prop({ type: String, index: true })
+  uuid: string;
+
   @Prop()
   title: string;
 

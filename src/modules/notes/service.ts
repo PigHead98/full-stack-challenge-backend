@@ -1,18 +1,20 @@
+import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { NoteEntity } from './entity';
 import { NoteRepository } from './repo';
 import { NoteDocument } from './schema';
 
+@Injectable()
 export class NoteService {
   constructor(private repository: NoteRepository) {}
 
   async findByUuid(uuid: string): Promise<NoteEntity> {
     const note = await this.repository.findByUuid(uuid);
 
-    return NoteEntity.fromSchema(note);
+    return NoteEntity.fromMongoDb(note);
   }
 
-  create(entity: NoteEntity) {
+  create(entity: NoteEntity | Partial<NoteEntity>) {
     return this.repository.create(entity.toCreateDto());
   }
 

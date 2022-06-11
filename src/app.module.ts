@@ -5,12 +5,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { configService } from './configs/service';
 import { GqlModule } from './graphql/module';
-import { NoteModule } from './modules/notes/module';
+import { AuthenticationMiddleware } from './middlewares/authentication.middleware';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(configService.DB_URI),
-    NoteModule,
     GraphQLModule.forRootAsync({
       driver: ApolloDriver,
       imports: [GqlModule],
@@ -22,12 +20,22 @@ import { NoteModule } from './modules/notes/module';
         playground: configService.IS_DEVELOPMENT_MODE,
       }),
     }),
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: configService.DB_URI,
+        useNewUrlParser: true,
+        autoIndex: false,
+      }),
+      connectionName: configService.DB_CHALLENGE_NAME,
+    }),
   ],
   controllers: [],
   providers: [],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply().forRoutes({ path: '/Note/*', method: RequestMethod.ALL });
+    consumer
+      .apply(AuthenticationMiddleware)
+      .forRoutes({ path: '/Note/*', method: RequestMethod.ALL });
   }
 }

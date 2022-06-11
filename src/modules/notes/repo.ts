@@ -4,7 +4,6 @@ import { Model, Types } from 'mongoose';
 import { CreateNoteDto } from './dtos/create-note';
 import { UpdateNoteDto } from './dtos/update-note';
 import { Note, NoteDocument } from './schema';
-
 @Injectable()
 export class NoteRepository {
   constructor(
@@ -12,9 +11,9 @@ export class NoteRepository {
     private noteModel: Model<NoteDocument>,
   ) {}
 
-  async create(createCatDto: CreateNoteDto): Promise<Note> {
-    const createdCat = new this.noteModel(createCatDto);
-    return createdCat.save();
+  async create(createCatDto: CreateNoteDto): Promise<NoteDocument> {
+    const create = new this.noteModel(createCatDto);
+    return create.save();
   }
 
   async findAll(): Promise<NoteDocument[]> {
