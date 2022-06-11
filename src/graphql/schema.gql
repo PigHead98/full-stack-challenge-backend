@@ -1,0 +1,14 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type NoteEntity {
+  content: String!
+  id: String!
+  title: String!
+  uuid: String!
+}
+
+type Query {
+  getNoteByUuid(uuid: String!): NoteEntity!
+}

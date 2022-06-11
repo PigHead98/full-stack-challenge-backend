@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { NoteModule } from '../modules/notes/module';
+import { NoteResolver } from '../modules/notes/resolver';
 
 @Module({
-  imports: [],
-  providers: [],
+  imports: [NoteModule],
+  providers: [NoteResolver],
   controllers: [],
   exports: [],
 })
