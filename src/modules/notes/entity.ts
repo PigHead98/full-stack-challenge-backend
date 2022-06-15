@@ -1,6 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Types } from 'mongoose';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { ICurrentUser } from '../../shared/interfaces';
 import { ClearNilProperties } from '../../shared/utils';
 import { CreateNoteDto } from './dtos/create-note';
@@ -10,19 +9,16 @@ import { Note, NoteDocument } from './schema';
 
 @ObjectType()
 export class NoteEntity extends Note {
-  private _id: Types.ObjectId;
-  id: string;
-
   @Field(() => String, {
     nullable: true,
   })
   uuid: string;
 
   @Field(() => String)
-  title: string;
+  value: string;
 
-  @Field(() => String)
-  content = '';
+  @Field(() => Date)
+  time: Date;
 
   createdBy = 'system';
 
@@ -32,25 +28,16 @@ export class NoteEntity extends Note {
   constructor(data: NoteEntity | Partial<NoteEntity>) {
     super();
 
-    if (data.id) {
-      this._id = new Types.ObjectId(data.id);
-      this.id = data.id;
-    }
-
     this.uuid = data.uuid;
-    this.content = data.content;
-    this.title = data.title;
+    this.time = data.time;
+    this.value = data.value;
     this.createdBy = data.createdBy;
-  }
-
-  getObjectId() {
-    return this._id;
   }
 
   toCreateDto(): CreateNoteDto {
     const result = {
-      title: this.title,
-      content: this.content,
+      value: this.value,
+      time: this.time,
       createdBy: this.createdBy,
       uuid: this.uuid,
     };
@@ -60,17 +47,16 @@ export class NoteEntity extends Note {
 
   toUpdateDto(): UpdateNoteDto {
     return {
-      title: this.title,
-      content: this.content,
+      value: this.value,
+      time: this.time,
     };
   }
 
   static toEntity(data: any): Partial<NoteEntity> {
     const result: Partial<NoteEntity> = {
-      id: data.id,
       uuid: data.uuid,
-      title: data.title,
-      content: data.content,
+      value: data.value,
+      time: data.time,
       createAt: data.createAt,
       updateAt: data.updateAt,
     };
@@ -80,13 +66,13 @@ export class NoteEntity extends Note {
 
   static fromCreateGql(note: GqlCreateNoteDto, user: ICurrentUser): NoteEntity {
     const entity = this.toEntity(note);
-    entity.createdBy = user.username;
-    entity.uuid = uuid();
+    entity.createdBy = user.username || 'system';
+    entity.uuid = entity.uuid || uuid();
 
     return new NoteEntity(entity);
   }
 
-  static fromMongoDb(note: NoteDocument): NoteEntity {
-    return new NoteEntity(note);
+  static fromMongoDb(note: NoteDocument): NoteEntity | Partial<NoteEntity> {
+    return this.toEntity(new NoteEntity(note));
   }
 }

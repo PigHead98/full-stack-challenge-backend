@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { CreateNoteDto } from './dtos/create-note';
 import { UpdateNoteDto } from './dtos/update-note';
 import { Note, NoteDocument } from './schema';
@@ -28,18 +28,26 @@ export class NoteRepository {
       .lean<NoteDocument>();
   }
 
-  async update(id: Types.ObjectId, data: UpdateNoteDto): Promise<NoteDocument> {
+  async update(uuid: string, data: UpdateNoteDto): Promise<NoteDocument> {
     return this.noteModel.findOneAndUpdate(
       {
-        _id: id,
+        uuid,
       },
       data,
     );
   }
 
-  async remove(id: Types.ObjectId) {
-    return this.noteModel.remove({
-      _id: id,
+  async remove(uuid: string) {
+    return this.noteModel.deleteOne({
+      uuid,
     });
+  }
+
+  async removeAll() {
+    return this.noteModel.deleteMany({});
+  }
+
+  async countAll() {
+    return this.noteModel.countDocuments({});
   }
 }

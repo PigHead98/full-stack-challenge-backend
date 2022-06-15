@@ -1,5 +1,8 @@
-import { InputType, PartialType } from '@nestjs/graphql';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
 import { CreateNoteDto } from './create-note';
 
 @InputType()
-export class GqlCreateNoteDto extends PartialType(CreateNoteDto, InputType) {}
+export class GqlCreateNoteDto extends PartialType(CreateNoteDto, InputType) {
+  @Field(() => String)
+  uuid: string;
+}

@@ -12,10 +12,10 @@ export class Note {
   uuid: string;
 
   @Prop()
-  title: string;
+  value: string;
 
-  @Prop()
-  content: string;
+  @Prop({ type: Date })
+  time: Date;
 
   @Prop({ type: Date, default: Date.now() })
   createAt: Date;

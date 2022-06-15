@@ -3,7 +3,7 @@ import { NoteEntity } from '../entity';
 
 @ObjectType()
 export class CreateNoteDto extends PickType(NoteEntity, [
-  'title',
-  'content',
+  'value',
   'createdBy',
+  'time',
 ]) {}
