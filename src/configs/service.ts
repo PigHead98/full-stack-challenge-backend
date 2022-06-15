@@ -21,9 +21,7 @@ export class ConfigService {
   }
 
   get DB_URI(): string {
-    return (
-      _.toLower(process.env.DB_URI) || 'mongodb://localhost:54322/challenge'
-    );
+    return process.env.DB_URI || 'mongodb://localhost:54322/challenge';
   }
 
   get DB_CHALLENGE_NAME(): string {
