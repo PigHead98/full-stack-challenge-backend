@@ -5,7 +5,7 @@ import { ClearNilProperties } from '../../shared/utils';
 import { CreateNoteDto } from './dtos/create-note';
 import { GqlCreateNoteDto } from './dtos/gql-create-note';
 import { UpdateNoteDto } from './dtos/update-note';
-import { Note, NoteDocument } from './schema';
+import { NoteDocument } from './schema';
 
 @ObjectType()
 export class NoteEntity {
@@ -26,8 +26,6 @@ export class NoteEntity {
   updateAt: Date;
 
   constructor(data: NoteEntity | Partial<NoteEntity>) {
-    super();
-
     this.uuid = data.uuid;
     this.time = data.time;
     this.value = data.value;
