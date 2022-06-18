@@ -11,7 +11,7 @@ async function startApiServer(port: number) {
   app.use(bodyParser.json({ limit: configService.BODY_SIZE_LIMIT }));
 
   await app.listen(port).then(() => {
-    console.log(`Service is listening port ${port}`);
+    console.log(`-- Service is listening port ${port}`);
   });
 }
 
