@@ -8,7 +8,7 @@ import { UpdateNoteDto } from './dtos/update-note';
 import { Note, NoteDocument } from './schema';
 
 @ObjectType()
-export class NoteEntity extends Note {
+export class NoteEntity {
   @Field(() => String, {
     nullable: true,
   })
